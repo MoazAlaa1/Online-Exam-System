@@ -1,0 +1,58 @@
+﻿@model UserModel
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title"> Create User </h3>
+        <nav aria-label="breadcrumb">
+           
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <form class="cmxform" id="signupForm" method="post" enctype="multipart/form-data" novalidate="novalidate"
+                            asp-controller="UserAccounts" asp-action="Save" asp-area="Admin">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="firstname">Firstname</label>
+                                <input id="firstname" class="form-control" asp-for="FirstName" type="text">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastname">Lastname</label>
+                                <input id="lastname" class="form-control" asp-for="LastName" type="text">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input id="email" class="form-control" asp-for="Email" type="email">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input id="password" class="form-control" asp-for="Password" type="password">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <ul>
+                                    <li>Required Length 8</li>
+                                    <li>Require NonAlphanumeric</li>
+                                    <li>Require Uppercase</li>
+                                </ul>
+                            </div>
+                            
+
+                            <input class="btn btn-primary" type="submit" value="Submit">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

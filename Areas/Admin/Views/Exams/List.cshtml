@@ -1,0 +1,64 @@
+﻿@model List<Exam>
+@section Styles {
+    <link rel="stylesheet" href="~/Admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+}
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title"> Exams </h3>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <a class="btn btn-success" asp-controller="Exams" asp-action="Edit" asp-area="Admin">
+                Create Exam
+            </a>
+            <div class="row">
+                <div class="col-12">
+                    <div id="order-listing_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table id="order-listing" class="table dataTable no-footer" aria-describedby="order-listing_info">
+                                    <thead>
+                                        <tr>
+                                            <th class="sorting sorting_asc" tabindex="0" aria-controls="order-listing" >Order #</th>
+                                            <th class="sorting" tabindex="0" aria-controls="order-listing" >Exam Title</th>
+                                            <th class="sorting" tabindex="0" aria-controls="order-listing" >Creation Date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="order-listing" >Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if(Model != null && Model.Count > 0 )
+                                        {
+                                            @for (int i = 0; i < Model.Count; i++)
+                                            {
+                                                <tr class="odd">
+                                                    <td class="sorting_1">@(i + 1)</td>
+                                                    <td>@Model[i].ExamTitle</td>
+                                                    <td>@Model[i].CreateDate</td>
+                                                    <td>
+
+                                                        <a class="btn btn-outline-info" asp-controller="Exams" asp-action="Edit" asp-area="Admin" asp-route-id="@Model[i].ExamId">Edit</a>
+                                                        <a class="btn btn-outline-primary" asp-controller="Question" asp-action="List" asp-area="Admin" asp-route-ExamId="@Model[i].ExamId">View</a>
+                                                        <a class="btn btn-outline-danger" asp-controller="Exams" asp-action="Delete" asp-area="Admin" asp-route-id="@Model[i].ExamId">Delete</a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/Admin/assets/vendors/datatables.net/jquery.dataTables.js"></script>
+    <script src="~/Admin/assets/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+    <script src="~/Admin/assets/js/data-table.js"></script>
+}

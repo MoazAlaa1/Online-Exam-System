@@ -1,0 +1,489 @@
+﻿@model Exam
+
+@section Styles {
+    <style>
+        /* * {  */
+        /*     box-sizing: border-box;  */
+        /*     margin: 0;  */
+        /*     padding: 0;  */
+        /*     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;  */
+        /* }  */
+
+        .exam { 
+            background-color: #f5f7fa; 
+            color: #333; 
+            line-height: 1.6;
+            padding: 20px;
+        } 
+
+        .containers{
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            position: relative;
+        }
+       
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+            .header h1 {
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+            .option:hover {
+                background-color: #e9ecef;
+            }
+
+            .option.selected {
+                background-color: #d1ecf1;
+                border-color: #3498db;
+            }
+
+            .option input {
+                margin-right: 10px;
+                cursor: pointer;
+            }
+
+            .option label {
+                cursor: pointer;
+                width: 100%;
+            }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+            button:disabled {
+                background-color: #cccccc;
+                cursor: not-allowed;
+            }
+
+        #nextBtn {
+            background-color: #3498db;
+            color: white;
+        }
+
+            #nextBtn:hover:not(:disabled) {
+                background-color: #2980b9;
+            }
+
+        #submitBtn {
+            background-color: #27ae60;
+            color: white;
+            display: none;
+        }
+
+            #submitBtn:hover {
+                background-color: #219653;
+            }
+
+        .result-container {
+            display: none;
+            text-align: center;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .pass {
+            color: #27ae60;
+        }
+
+        .fail {
+            color: #e74c3c;
+        }
+
+        .score {
+            font-size: 36px;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .message {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .restart-btn {
+            background-color: #3498db;
+            color: white;
+            margin-top: 20px;
+        }
+
+            .restart-btn:hover {
+                background-color: #2980b9;
+            }
+
+        .warning {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+}
+
+<div class="exam">
+    <div class="containers">
+        <div class="header">
+            <h1>@Model.ExamTitle</h1>
+            <p>@Model.ExamDescription</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="loading" id="loadingIndicator">
+            <div class="spinner"></div>
+            <p>Processing your answer...</p>
+        </div>
+
+        <div class="question-container" id="questionContainer">
+            <div class="question-number" id="questionNumber"></div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options-container" id="optionsContainer"></div>
+            <div class="warning" id="warning">Please select an answer before proceeding.</div>
+        </div>
+
+        <div class="navigation">
+            <button id="nextBtn">Next Question</button>
+            <button id="submitBtn">Submit Exam</button>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <div class="result-icon" id="resultIcon"></div>
+            <div class="score" id="scoreDisplay"></div>
+            <div class="message" id="resultMessage"></div>
+            <button class="restart-btn" id="restartBtn">Restart Exam</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+        <script>
+                let currentQuestionIndex = 0;
+            let userAnswers = [];
+            let correctAnswers = [];
+            let examData = null;
+
+            const questionNumberElement = document.getElementById('questionNumber');
+            const questionTextElement = document.getElementById('questionText');
+            const optionsContainerElement = document.getElementById('optionsContainer');
+            const nextButton = document.getElementById('nextBtn');
+            const submitButton = document.getElementById('submitBtn');
+            const progressBar = document.getElementById('progressBar');
+            const warningElement = document.getElementById('warning');
+            const resultContainer = document.getElementById('resultContainer');
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const resultMessage = document.getElementById('resultMessage');
+            const resultIcon = document.getElementById('resultIcon');
+            const restartButton = document.getElementById('restartBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+
+
+            async function initExam() {
+                try {
+                    const response = await fetch('/api/Exam/'+@Model.ExamId);
+                    console.log("Fist response" )
+                    console.log(response)
+                    if (!response.ok) {
+                        throw new Error('Failed to load exam data');
+                    }
+                    examData = await response.json();
+                    // console.log("Fist examData" )
+                    // console.log(examData)
+                    // console.log("Question")
+                    // console.log(examData.questionsAnswers[0].text)
+
+
+                    displayQuestion(currentQuestionIndex);
+                    updateProgressBar();
+
+                    nextButton.addEventListener('click', handleNextQuestion);
+                    submitButton.addEventListener('click', handleSubmitExam);
+                    restartButton.addEventListener('click', restartExam);
+                }
+                catch (error) {
+                    console.error('Error initializing exam:', error);
+                    alert('Failed to load exam. Please refresh the page.');
+                }
+            }
+
+
+            function displayQuestion(index) {
+                const question = examData.questionsAnswers[index];
+
+                questionNumberElement.textContent = `Question ${index + 1} of ${examData.questionsAnswers.length}`;
+                questionTextElement.textContent = question.text;
+
+
+                optionsContainerElement.innerHTML = '';
+
+                question.options.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'option';
+                    optionElement.innerHTML = `<input type="radio" id="${option.id}" name="answer" value="${option.id}"><label for="${option.id}">${option.text}</label>`;
+                    optionsContainerElement.appendChild(optionElement);
+
+                    optionElement.addEventListener('click', () => {
+
+                        document.querySelectorAll('.option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+
+                        optionElement.classList.add('selected');
+                        document.getElementById(option.id).checked = true;
+
+                        warningElement.style.display = 'none';
+                    });
+                });
+
+                if (index === examData.questionsAnswers.length - 1) {
+                    nextButton.style.display = 'none';
+                    submitButton.style.display = 'block';
+                } else {
+                    nextButton.style.display = 'block';
+                    submitButton.style.display = 'none';
+                }
+            }
+
+            function updateProgressBar() {
+                const progress = ((currentQuestionIndex + 1) / examData.questionsAnswers.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+
+            async function handleNextQuestion() {
+                const selectedOption = document.querySelector('input[name="answer"]:checked');
+
+                if (!selectedOption) {
+                    warningElement.style.display = 'block';
+                    return;
+                }
+
+                loadingIndicator.style.display = 'block';
+                nextButton.disabled = true;
+
+                try {
+
+                    const response = await fetch('/api/Exam/SaveAnswer', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            questionId: examData.questionsAnswers[currentQuestionIndex].id,
+                            choiceId: selectedOption.value
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to save answer');
+                    }
+                    console.log("Respons")
+                    console.log(response)
+
+                    userAnswers.push(selectedOption.value);
+                    console.log("userAnswers")
+                    console.log(userAnswers)
+
+                    currentQuestionIndex++;
+                    displayQuestion(currentQuestionIndex);
+                    console.log("displayQuestion")
+                    updateProgressBar();
+                    console.log("updateProgressBar")
+                } catch (error) {
+                    console.error('Error saving answer:', error);
+                    alert('Failed to save your answer. Please try again.');
+                } finally {
+                    loadingIndicator.style.display = 'none';
+                    nextButton.disabled = false;
+                }
+            }
+
+            async function handleSubmitExam() {
+                const selectedOption = document.querySelector('input[name="answer"]:checked');
+
+                if (!selectedOption) {
+                    warningElement.style.display = 'block';
+                    return;
+                }
+
+                loadingIndicator.style.display = 'block';
+                submitButton.disabled = true;
+
+                try {
+
+                    const answerResponse = await fetch('/api/Exam/SaveAnswer', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            questionId: examData.questionsAnswers[currentQuestionIndex].id,
+                            choiceId: selectedOption.value
+                        })
+                    });
+
+                    if (!answerResponse.ok) {
+                        throw new Error('Failed to save answer');
+                    }
+
+                    userAnswers.push(selectedOption.value);
+
+                    const resultResponse = await fetch('/api/Exam/SubmitExam/'+@(Model.ExamId));
+                    console.log("resultResponse");
+                    console.log(resultResponse);
+                    if (!resultResponse.ok) {
+                        throw new Error('Failed to submit exam');
+                    }
+
+                const result = await resultResponse.json();
+                console.log("result");
+                console.log(result);
+                console.log("score");
+                console.log(result.score);
+                console.log(result.passed);
+                displayResults(result.score, result.passed);
+            } 
+            catch (error) {
+                console.error('Error submitting exam:', error);
+                alert('Failed to submit exam. Please try again.');
+            } finally {
+                loadingIndicator.style.display = 'none';
+                submitButton.disabled = false;
+            }
+        }
+
+
+        function displayResults(percentage, passed)
+        {
+            document.getElementById('questionContainer').style.display = 'none';
+            nextButton.style.display = 'none';
+            submitButton.style.display = 'none';
+
+            resultContainer.style.display = 'block';
+
+            scoreDisplay.textContent = `${percentage}%`;
+
+            if (passed == 1)
+            {
+                resultIcon.textContent = '✓';
+                resultIcon.className = 'result-icon pass';
+                resultMessage.textContent = 'Congratulations! You passed the exam.';
+            } else {
+                resultIcon.textContent = '✗';
+                resultIcon.className = 'result-icon fail';
+                resultMessage.textContent = 'Sorry, you did not pass the exam. Please try again.';
+            }
+        }
+
+
+        async function restartExam() {
+            try {
+                await fetch('/api/Exam/ResetExam', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+
+
+                currentQuestionIndex = 0;
+                userAnswers = [];
+
+                resultContainer.style.display = 'none';
+
+                document.getElementById('questionContainer').style.display = 'block';
+
+                progressBar.style.width = '0%';
+
+                await initExam();
+            } catch (error) {
+                console.error('Error restarting exam:', error);
+                alert('Failed to restart exam. Please refresh the page.');
+            }
+        }
+
+        window.onload = initExam;
+        </script>
+
+}

@@ -1,0 +1,76 @@
+[
+  {
+    "ContainingType": "OnlineExamSystem.ApiControllers.ExamController",
+    "Method": "GetExamData",
+    "RelativePath": "api/Exam/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineExamSystem.ApiControllers.ExamController",
+    "Method": "ResetExam",
+    "RelativePath": "api/Exam/ResetExam",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineExamSystem.ApiControllers.ExamController",
+    "Method": "SaveAnswer",
+    "RelativePath": "api/Exam/SaveAnswer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "OnlineExamSystem.Classes.AnswerRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineExamSystem.ApiControllers.ExamController",
+    "Method": "SubmitExam",
+    "RelativePath": "api/Exam/SubmitExam/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineExamSystem.ApiControllers.ExamController",
+    "Method": "SubmitExam",
+    "RelativePath": "api/Exame/SubmitExam/{id}",
+    "HttpMethod": "",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

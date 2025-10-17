@@ -21,11 +21,11 @@ namespace OnlineExamSystem.ApiControllers
             _ClsSubmission = clsSubmission;
             _userManager = userManager;
         }
-
+        // Two sessions , the first to store user answers and the second to store the correct answers then compare between them 
         private const string UserAnswersKey = "UserAnswers";
         private const string CorrectAnswersKey = "CorrectAnswers";
 
-        // Initialize exam data
+        // Initialize exam data and format it to be convertable to json
         private ExamData GetExamDataDB(int id)
         {
             var lstMcq = _ClsChoice.GetChoicesByExamId(id);
@@ -122,7 +122,7 @@ namespace OnlineExamSystem.ApiControllers
                     }
                 }
 
-                double score = (double)correctCount / correctAnswers.Count * 100;
+                float score = (float)correctCount / correctAnswers.Count * 100;
                 bool passed = score >= 60;
 
                 var user = await _userManager.GetUserAsync(User);
@@ -160,4 +160,5 @@ namespace OnlineExamSystem.ApiControllers
         }
     }
 }
+
 

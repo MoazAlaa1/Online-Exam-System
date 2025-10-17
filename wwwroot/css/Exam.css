@@ -1,0 +1,189 @@
+﻿
+.exam {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.containers {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    position: relative;
+}
+
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eaeaea;
+}
+
+    .header h1 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+
+.progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin: 20px 0;
+    height: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #3498db;
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.question-container {
+    margin-bottom: 30px;
+}
+
+.question-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.question-text {
+    font-size: 20px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .option:hover {
+        background-color: #e9ecef;
+    }
+
+    .option.selected {
+        background-color: #d1ecf1;
+        border-color: #3498db;
+    }
+
+    .option input {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    .option label {
+        cursor: pointer;
+        width: 100%;
+    }
+
+.navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+    button:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+
+#nextBtn {
+    background-color: #3498db;
+    color: white;
+}
+
+    #nextBtn:hover:not(:disabled) {
+        background-color: #2980b9;
+    }
+
+#submitBtn {
+    background-color: #27ae60;
+    color: white;
+    display: none;
+}
+
+    #submitBtn:hover {
+        background-color: #219653;
+    }
+
+.result-container {
+    display: none;
+    text-align: center;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.result-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.pass {
+    color: #27ae60;
+}
+
+.fail {
+    color: #e74c3c;
+}
+
+.score {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 15px 0;
+}
+
+.message {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.restart-btn {
+    background-color: #3498db;
+    color: white;
+    margin-top: 20px;
+}
+
+    .restart-btn:hover {
+        background-color: #2980b9;
+    }
+
+.warning {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+}

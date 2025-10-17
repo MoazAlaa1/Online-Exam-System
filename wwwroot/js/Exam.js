@@ -13,22 +13,17 @@
             const submitButton = document.getElementById('submitBtn');
             const restartButton = document.getElementById('restartBtn');
             Exam.ExamId = examId;
-            console.log(Exam.ExamId)
             const response = await fetch('/api/Exam/' + Exam.ExamId);
-            console.log("Fist response")
-            console.log(response)
+            // console.log("Fist response")
+            // console.log(response)
             if (!response.ok) {
                 throw new Error('Failed to load exam data');
             }
             Exam.examData = await response.json();
-            console.log("Fist examData")
-            console.log(Exam.examData)
-            console.log("Question")
-            console.log(Exam.examData.questionsAnswers[0].text)
-            console.log(nextButton);
+            // console.log("Fist examData")
+            // console.log(Exam.examData)
 
             Exam.displayQuestion(Exam.currentQuestionIndex);
-            console.log("here 012");
             Exam.updateProgressBar();
 
             nextButton.addEventListener('click', Exam.handleNextQuestion);
@@ -44,7 +39,6 @@
 
 
     displayQuestion: (index) => {
-        console.log("here 0");
         const questionNumberElement = document.getElementById('questionNumber');
         const questionTextElement = document.getElementById('questionText');
         const optionsContainerElement = document.getElementById('optionsContainer');
@@ -86,14 +80,13 @@
             nextButton.style.display = 'block';
             submitButton.style.display = 'none';
         }
-        console.log("here 1");
+
     },
 
     updateProgressBar: () => {
         const progressBar = document.getElementById('progressBar');
         const progress = ((Exam.currentQuestionIndex + 1) / Exam.examData.questionsAnswers.length) * 100;
         progressBar.style.width = `${progress}%`;
-        console.log("here 2");
     },
 
     handleNextQuestion: async () => {
@@ -126,18 +119,14 @@
             if (!response.ok) {
                 throw new Error('Failed to save answer');
             }
-            console.log("Respons")
-            console.log(response)
+            // console.log("Respons")
+            // console.log(response)
 
             Exam.userAnswers.push(selectedOption.value);
-            console.log("userAnswers")
-            console.log(Exam.userAnswers)
 
             Exam.currentQuestionIndex++;
             Exam.displayQuestion(Exam.currentQuestionIndex);
-            console.log("displayQuestion")
             Exam.updateProgressBar();
-            console.log("updateProgressBar")
         } catch (error) {
             console.error('Error saving answer:', error);
             alert('Failed to save your answer. Please try again.');
@@ -181,18 +170,13 @@
             Exam.userAnswers.push(selectedOption.value);
 
             const resultResponse = await fetch('/api/Exam/SubmitExam/' + Exam.ExamId);
-            console.log("resultResponse");
-            console.log(resultResponse);
+            // console.log("resultResponse");
+            // console.log(resultResponse);
             if (!resultResponse.ok) {
                 throw new Error('Failed to submit exam');
             }
 
             const result = await resultResponse.json();
-            console.log("result");
-            console.log(result);
-            console.log("score");
-            console.log(result.score);
-            console.log(result.passed);
             Exam.displayResults(result.score, result.passed);
         }
         catch (error) {
@@ -259,4 +243,5 @@
             alert('Failed to restart exam. Please refresh the page.');
         }
     }
+
 }
